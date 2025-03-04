@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <Layout>
       <Box maxW='7xl' mx='auto' px={{ base: '4', md: '8', lg: '12' }} py='6'>
-        <Heading mb='6'>Dashboard</Heading>
+        <Heading mb='6'>Admin Dashboard</Heading>
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing='6' mb='8'>
           <StatCard

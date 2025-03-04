@@ -48,7 +48,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       />
 
       {/* Main content */}
-      <Box ml={{ base: 0, md: 60 }} p='4' pt={{ base: 12, md: 4 }}>
+      <Box ml={{ base: 35, md: 60 }} p='4' pt={{ base: 12, md: 4 }}>
         {children}
       </Box>
     </Box>

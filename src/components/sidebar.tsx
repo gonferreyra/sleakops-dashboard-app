@@ -10,16 +10,7 @@ import {
   Stack,
   Icon,
 } from '@chakra-ui/react';
-import {
-  Home,
-  // Settings,
-  // Users,
-  // BarChart,
-  // FileText,
-  // HelpCircle,
-  // Database,
-  // Server,
-} from 'lucide-react';
+import { Home, Database } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -31,13 +22,7 @@ interface LinkItemProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: Home, path: '/' },
-  // { name: 'Dashboard', icon: BarChart, path: '/dashboard' },
-  // { name: 'AWS RDS Pricing', icon: Database, path: '/aws-pricing' },
-  // { name: 'RDS Products', icon: Server, path: '/rds-products' },
-  // { name: 'Users', icon: Users, path: '/users' },
-  // { name: 'Documents', icon: FileText, path: '/documents' },
-  // { name: 'Settings', icon: Settings, path: '/settings' },
-  // { name: 'Help', icon: HelpCircle, path: '/help' },
+  { name: 'AWS RDS', icon: Database, path: '/aws-pricing' },
 ];
 
 interface SidebarProps extends BoxProps {
@@ -53,18 +38,18 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRight='1px'
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
+      w={{ base: 'full', md: 52 }}
       pos='fixed'
       h='full'
       {...rest}
     >
       <Flex h='20' alignItems='center' mx='8' justifyContent='space-between'>
         <Text fontSize='2xl' fontWeight='bold'>
-          NextApp
+          Sleakops
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      <Stack spacing={4} mx={4}>
+      <Stack spacing={2} mx={2}>
         {LinkItems.map((link) => (
           <NavItem
             key={link.name}
@@ -107,7 +92,7 @@ const NavItem = ({ icon, path, isActive, children, ...rest }: NavItemProps) => {
       >
         {icon && (
           <Icon
-            mr='4'
+            mr='2'
             fontSize='16'
             as={icon}
             color={isActive ? 'brand.500' : 'gray.500'}

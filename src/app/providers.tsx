@@ -25,6 +25,10 @@ const theme = extendTheme({
       900: '#171923',
     },
   },
+  fonts: {
+    heading: 'Inter, sans-serif',
+    body: 'Inter, sans-serif',
+  },
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {
