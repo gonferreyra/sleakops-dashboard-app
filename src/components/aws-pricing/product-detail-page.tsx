@@ -18,6 +18,7 @@ import {
   StatHelpText,
   Badge,
   StackDivider,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 type ProductDetailPageProps = {
@@ -133,7 +134,7 @@ export default function ProductDetailPage({
         </Card>
 
         <Heading size='md' mt={4}>
-          Pricing
+          Pricing Options
         </Heading>
 
         <Flex
@@ -157,7 +158,7 @@ export default function ProductDetailPage({
                   </Badge>
                 </Text>
               </CardHeader>
-              <CardBody>
+              <CardBody className='flex flex-col'>
                 <Text
                   mb={{ base: 2, md: 4 }}
                   fontSize={{ base: 'sm', md: 'md' }}
@@ -207,54 +208,43 @@ export default function ProductDetailPage({
                     </StatHelpText>
                   </Stat>
                 </SimpleGrid>
-                <Stack spacing='3' mb='4'>
-                  {
-                    price.type === 'Reserved' && (
-                      <>
-                        <Text fontWeight='bold'>Additional Features:</Text>
-                        <Flex align='center'>
-                          <Badge colorScheme='green' mr='2'>
-                            Lease length
-                          </Badge>
-                          <Text>{price.leaseContractLength}</Text>
-                        </Flex>
-                        <Flex align='center'>
-                          <Badge colorScheme='purple' mr='2'>
-                            Purchase Option
-                          </Badge>
-                          <Text>{price.purchaseOption}</Text>
-                        </Flex>
-                        <Flex align='center'>
-                          <Badge colorScheme='blue' mr='2'>
-                            Offering class
-                          </Badge>
-                          <Text>{price.offeringClass}</Text>
-                        </Flex>
-                      </>
-                    )
-                    // : (
-                    //   <>
-                    //     <Flex align='center'>
-                    //       <Badge colorScheme='green' mr='2'>
-                    //         Lease length
-                    //       </Badge>
-                    //       <Text>{price.leaseContractLength}</Text>
-                    //     </Flex>
-                    //     <Flex align='center'>
-                    //       <Badge colorScheme='purple' mr='2'>
-                    //         Purchase Option
-                    //       </Badge>
-                    //       <Text>{price.purchaseOption}</Text>
-                    //     </Flex>
-                    //     <Flex align='center'>
-                    //       <Badge colorScheme='blue' mr='2'>
-                    //         Offering class
-                    //       </Badge>
-                    //       <Text>{price.offeringClass}</Text>
-                    //     </Flex>
-                    //   </>
-                    // )
-                  }
+                <Stack spacing='3' mb='4' className='mt-auto'>
+                  {price.type === 'Reserved' && (
+                    <>
+                      <Text fontWeight='bold'>Additional Features:</Text>
+                      <Flex align='center'>
+                        <Badge colorScheme='green' mr='2'>
+                          Lease length
+                        </Badge>
+                        <Text>{price.leaseContractLength}</Text>
+                      </Flex>
+                      <Flex align='center'>
+                        <Badge colorScheme='purple' mr='2'>
+                          Purchase Option
+                        </Badge>
+                        <Text>{price.purchaseOption}</Text>
+                      </Flex>
+                      <Flex align='center'>
+                        <Badge colorScheme='blue' mr='2'>
+                          Offering class
+                        </Badge>
+                        <Text>{price.offeringClass}</Text>
+                      </Flex>
+                    </>
+                  )}
+                  <Button
+                    w={'full'}
+                    mt={'auto'}
+                    bg={useColorModeValue('#151f21', 'gray.900')}
+                    color={'white'}
+                    rounded={'md'}
+                    _hover={{
+                      transform: 'translateY(-2px)',
+                      boxShadow: 'lg',
+                    }}
+                  >
+                    GET IT NOW
+                  </Button>
                 </Stack>
               </CardBody>
             </Card>

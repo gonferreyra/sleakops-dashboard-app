@@ -8,6 +8,7 @@ import {
   DrawerContent,
   useDisclosure,
   IconButton,
+  DrawerCloseButton,
 } from '@chakra-ui/react';
 import { Menu } from 'lucide-react';
 import { Sidebar } from './sidebar';
@@ -19,7 +20,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <Box minH='100vh' bg={useColorModeValue('gray.50', 'gray.900')}>
       <Sidebar
         onClose={() => onClose}
-        display={{ base: 'none', md: 'block' }}
+        display={{ base: 'none', lg: 'block' }}
       />
       <Drawer
         isOpen={isOpen}
@@ -36,7 +37,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       {/* Mobile nav */}
       <IconButton
-        display={{ base: 'flex', md: 'none' }}
+        display={{ base: 'flex', lg: 'none' }}
         onClick={onOpen}
         variant='outline'
         aria-label='open menu'
@@ -48,7 +49,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       />
 
       {/* Main content */}
-      <Box ml={{ base: 35, md: 60 }} p='4' pt={{ base: 12, md: 4 }}>
+      <Box ml={{ base: 35, lg: 52, xl: 60 }} p='4' pt={{ base: 12, lg: 4 }}>
         {children}
       </Box>
     </Box>

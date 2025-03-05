@@ -38,7 +38,7 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRight='1px'
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 52 }}
+      w={{ base: 'full', lg: 52 }}
       pos='fixed'
       h='full'
       {...rest}
@@ -47,7 +47,7 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
         <Text fontSize='2xl' fontWeight='bold'>
           Sleakops
         </Text>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+        <CloseButton display={{ base: 'flex', lg: 'none' }} onClick={onClose} />
       </Flex>
       <Stack spacing={2} mx={2}>
         {LinkItems.map((link) => (
