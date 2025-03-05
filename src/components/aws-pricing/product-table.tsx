@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Layout from '@/components/layout';
 import {
   Box,
   Heading,
@@ -26,7 +25,7 @@ import {
 } from '@chakra-ui/react';
 import { Search, Filter, Info } from 'lucide-react';
 import { AWSPrincingApiResponse, Product } from '@/lib/interfaces';
-import { getEngineColor } from '@/lib/utils';
+import { filterAndSortProducts, getEngineColor } from '@/lib/utils';
 import ProductDetailPage from './product-detail-page';
 
 type ProductTableProps = {
@@ -34,7 +33,7 @@ type ProductTableProps = {
 };
 
 export default function ProductTable({ response }: ProductTableProps) {
-  const [products, setProducts] = useState(() => response.products);
+  const [products] = useState(() => response.products);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -42,65 +41,47 @@ export default function ProductTable({ response }: ProductTableProps) {
   const [memoryFilter, setMemoryFilter] = useState<string>('all');
   const itemsPerPage = 10; // Cantidad de items por página
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(Object.values(products).length / itemsPerPage);
 
   const { onOpen } = useDisclosure();
 
   // Filter products based on search term and filters
   useEffect(() => {
-    let result = [...Object.values(products)];
-
-    // Apply search term filter
-    if (searchTerm) {
-      result = result.filter(
-        (product) =>
-          product.attributes?.instanceType
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          product.attributes.databaseEngine
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          product.attributes?.memory
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          product.attributes?.vcpu
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Apply engine filter
-    if (engineFilter !== 'all') {
-      result = result.filter(
-        (product) => product.attributes.databaseEngine === engineFilter
-      );
-    }
-
-    // Apply region filter
-    if (memoryFilter !== 'all') {
-      result = result.filter(
-        (product) => product.attributes.memory === memoryFilter
-      );
-    }
-
+    const result = filterAndSortProducts(
+      Object.values(products),
+      searchTerm,
+      engineFilter,
+      memoryFilter
+    );
     setFilteredProducts(result);
+    setCurrentPage(1);
   }, [searchTerm, engineFilter, memoryFilter, products]);
 
-  // Get unique engines and regions for filters
+  // Get unique engines and regions for filters, delete empty values and sort them
   const engines = [
     'all',
-    ...new Set(
-      Object.values(products).map(
-        (product) => product.attributes.databaseEngine
-      )
-    ),
+    ...[
+      ...new Set(
+        Object.values(products).map(
+          (product) => product.attributes.databaseEngine
+        )
+      ),
+    ]
+      .filter((engine) => !!engine)
+      .sort(),
   ];
   const memories = [
     'all',
-    ...new Set(
-      Object.values(products).map((product) => product.attributes.memory)
-    ),
+    ...[
+      ...new Set(
+        Object.values(products).map((product) => product.attributes.memory)
+      ),
+    ]
+      .filter((engine) => !!engine)
+      .sort()
+      .reverse(),
   ];
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   // Divide data in pages
   const paginatedData = filteredProducts.slice(
@@ -118,7 +99,7 @@ export default function ProductTable({ response }: ProductTableProps) {
   };
 
   return (
-    <Box maxW='7xl' mx='auto' px={{ base: '4', md: '8', lg: '12' }} py='6'>
+    <Box maxW='7xl' mx='auto' px={{ base: '4', md: '8', xl: '12' }} py='6'>
       {selectedProduct ? (
         <ProductDetailPage
           product={selectedProduct}
@@ -172,31 +153,35 @@ export default function ProductTable({ response }: ProductTableProps) {
                 </Select>
               </SimpleGrid>
 
-              {/* {loading ? (
-              <Flex justify='center' align='center' py='10'>
-                <Spinner size='xl' color='blue.500' />
-                <Text ml='4' fontSize='lg'>
-                  Loading RDS pricing data...
-                </Text>
-              </Flex>
-            ) : ( */}
-
-              <TableContainer borderWidth='1px' borderRadius='lg'>
+              <TableContainer
+                borderWidth='1px'
+                borderRadius='lg'
+                overflowX='auto'
+              >
                 <Table variant='simple' size='sm'>
                   <Thead>
-                    <Tr>
-                      <Th>Instance Type</Th>
+                    <Tr height={'50px'}>
+                      <Th display={{ base: 'none', md: 'table-cell' }}>
+                        Instance Type
+                      </Th>
                       <Th>Engine</Th>
-                      <Th>Region</Th>
-                      <Th>vCPU</Th>
-                      <Th>Memory</Th>
+                      <Th display={{ base: 'none', md: 'table-cell' }}>
+                        Region
+                      </Th>
+                      <Th display={{ base: 'none', md: 'table-cell' }}>vCPU</Th>
+                      <Th display={{ base: 'none', lg: 'table-cell' }}>
+                        Memory
+                      </Th>
                       <Th>Actions</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     {paginatedData.map((product) => (
                       <Tr key={product.sku}>
-                        <Td fontWeight='medium'>
+                        <Td
+                          fontWeight='medium'
+                          display={{ base: 'none', md: 'table-cell' }}
+                        >
                           {product.attributes.instanceType}
                         </Td>
                         <Td>
@@ -208,9 +193,15 @@ export default function ProductTable({ response }: ProductTableProps) {
                             {product.attributes.databaseEngine}
                           </Badge>
                         </Td>
-                        <Td>{product.attributes.regionCode}</Td>
-                        <Td>{product.attributes.vcpu}</Td>
-                        <Td>{product.attributes.memory}</Td>
+                        <Td display={{ base: 'none', md: 'table-cell' }}>
+                          {product.attributes.regionCode}
+                        </Td>
+                        <Td display={{ base: 'none', md: 'table-cell' }}>
+                          {product.attributes.vcpu}
+                        </Td>
+                        <Td display={{ base: 'none', lg: 'table-cell' }}>
+                          {product.attributes.memory}
+                        </Td>
                         <Td>
                           <Button
                             size='sm'
@@ -260,7 +251,7 @@ export default function ProductTable({ response }: ProductTableProps) {
               </>
             )}
 
-            {/* Mostrar páginas cercanas */}
+            {/* Show close pages */}
             {Array.from({ length: 5 }, (_, i) => currentPage - 2 + i)
               .filter((page) => page > 0 && page <= totalPages)
               .map((page) => (
@@ -310,14 +301,6 @@ export default function ProductTable({ response }: ProductTableProps) {
           </Card>
         </>
       )}
-
-      {/* {error && (
-          <Alert status='error' mb='6'>
-            <AlertIcon />
-            <AlertTitle mr={2}>Error!</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )} */}
     </Box>
   );
 }
