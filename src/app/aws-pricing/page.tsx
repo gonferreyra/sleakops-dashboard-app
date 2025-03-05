@@ -1,9 +1,20 @@
-import { fetchItems } from '@/lib/actions';
-import { AWSPrincingApiResponse } from '@/lib/interfaces';
+'use client';
+
+import { fetchItems } from '@/lib/api';
+import { useQuery } from '@tanstack/react-query';
 import ProductTable from '@/components/aws-pricing/product-table';
+import Loading from './loading';
 
-export default async function Page() {
-  const response: AWSPrincingApiResponse = await fetchItems();
+export default function Page() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['items'],
+    queryFn: fetchItems,
+    retry: false,
+  });
 
-  return <ProductTable response={response} />;
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return <ProductTable response={data} />;
 }
