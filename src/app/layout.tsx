@@ -4,6 +4,7 @@ import './globals.css';
 import { Providers } from './providers';
 import ReactQueryProvider from '@/components/react-query-provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Layout from '@/components/layout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
     <ReactQueryProvider>
       <html lang='en'>
         <body className={`${inter} antialiased`}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <Layout>{children}</Layout>
+          </Providers>
           <ReactQueryDevtools initialIsOpen={false} />
         </body>
       </html>
