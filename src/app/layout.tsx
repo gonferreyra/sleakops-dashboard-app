@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
+import ReactQueryProvider from '@/components/react-query-provider';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,10 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={`${inter} antialiased`}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+    <ReactQueryProvider>
+      <html lang='en'>
+        <body className={`${inter} antialiased`}>
+          <Providers>{children}</Providers>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </body>
+      </html>
+    </ReactQueryProvider>
   );
 }
