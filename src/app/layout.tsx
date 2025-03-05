@@ -21,6 +21,18 @@ export default function RootLayout({
   return (
     <ReactQueryProvider>
       <html lang='en'>
+        <head>
+          <script>
+            {`
+              (function() {
+                const value = localStorage.getItem('chakra-ui-color-mode')
+                if (value === 'dark') {
+                  document.documentElement.style.setProperty('color-scheme', 'dark')
+                }
+              })()
+            `}
+          </script>
+        </head>
         <body className={`${inter} antialiased`}>
           <Providers>
             <Layout>{children}</Layout>
