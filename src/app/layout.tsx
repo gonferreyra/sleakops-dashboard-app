@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <ReactQueryProvider>
-      <html lang='en'>
+      <html lang='en' suppressHydrationWarning>
         <head>
           <script>
             {`
