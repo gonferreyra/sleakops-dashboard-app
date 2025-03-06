@@ -1,6 +1,6 @@
 'use client';
 import { Product, Terms } from '@/lib/interfaces';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice, getEngineColor } from '@/lib/utils';
 import {
   Box,
   Heading,
@@ -19,6 +19,7 @@ import {
   Badge,
   StackDivider,
   useColorModeValue,
+  VStack,
 } from '@chakra-ui/react';
 
 type ProductDetailPageProps = {
@@ -94,45 +95,34 @@ export default function ProductDetailPage({
   const allPrices = [...onDemandPrices, ...reservedPrices];
 
   return (
-    <Box>
-      <Button onClick={onBack} mb={4}>
+    <Flex flexDirection='column'>
+      <Button onClick={onBack} ml={'auto'}>
         Back
       </Button>
+      <VStack spacing={6} textAlign='center' my='4'>
+        <Heading as='h1' fontSize='4xl'>
+          Plans that fit your need
+        </Heading>
+        <Text fontSize='lg' color={'gray.500'}>
+          Check out all the options we have with
+          <Badge
+            p='1'
+            rounded='full'
+            mx='1'
+            colorScheme={getEngineColor(
+              product.attributes.databaseEngine as string
+            )}
+          >
+            {product.attributes.databaseEngine}
+          </Badge>
+          engine and
+          <Badge p='1' rounded='full' mx='1' colorScheme='red'>
+            {product.attributes.instanceType}
+          </Badge>
+          instance and get started today by selecting one. Cancel at anytime.
+        </Text>
+      </VStack>
       <Flex flexDir='column' justifyContent='center' alignItems='center'>
-        <Card>
-          <CardHeader>
-            <Heading size='md'>Product SKU {product.sku}</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stack divider={<StackDivider />} spacing='1'>
-              <Box>
-                <Heading size='xs' textTransform='uppercase'>
-                  Engine
-                </Heading>
-                <Text pt='2' fontSize='sm'>
-                  {product.attributes.databaseEngine}
-                </Text>
-              </Box>
-              <Box>
-                <Heading size='xs' textTransform='uppercase'>
-                  Instance Type
-                </Heading>
-                <Text pt='2' fontSize='sm'>
-                  {product.attributes.instanceType}
-                </Text>
-              </Box>
-              <Box>
-                <Heading size='xs' textTransform='uppercase'>
-                  Region
-                </Heading>
-                <Text pt='2' fontSize='sm'>
-                  {product.attributes.regionCode}
-                </Text>
-              </Box>
-            </Stack>
-          </CardBody>
-        </Card>
-
         <Heading size='md' mt={4}>
           Pricing Options
         </Heading>
@@ -149,7 +139,7 @@ export default function ProductDetailPage({
                 <Text size={{ base: 'md', md: 'xl' }}>
                   <Badge
                     variant='subtle'
-                    colorScheme={price.type === 'OnDemand' ? 'green' : 'orange'}
+                    colorScheme={price.type === 'OnDemand' ? 'green' : 'blue'}
                     fontSize={{ base: 14, md: 18 }}
                     borderRadius='lg'
                     padding={2}
@@ -176,7 +166,7 @@ export default function ProductDetailPage({
                       {product.attributes.vcpu}
                     </StatNumber>
                     <StatHelpText fontSize={{ base: 12, md: 14 }}>
-                      Dedicated vCPU cores
+                      Dedicated cores
                     </StatHelpText>
                   </Stat>
                   <Stat>
@@ -201,7 +191,13 @@ export default function ProductDetailPage({
                   <Stat>
                     <StatLabel fontSize={{ base: 12, md: 14 }}>Price</StatLabel>
                     <StatNumber fontSize={{ base: 20, md: 24 }}>
-                      ${Number(price.price).toFixed(2)}
+                      ${' '}
+                      {Number(price.price).toLocaleString(undefined, {
+                        minimumFractionDigits:
+                          price.price.toString().length > 6 ? 0 : 2,
+                        maximumFractionDigits:
+                          price.price.toString().length > 6 ? 0 : 2,
+                      })}
                     </StatNumber>
                     <StatHelpText fontSize={{ base: 12, md: 14 }}>
                       {price.unit}
@@ -251,6 +247,6 @@ export default function ProductDetailPage({
           ))}
         </Flex>
       </Flex>
-    </Box>
+    </Flex>
   );
 }
