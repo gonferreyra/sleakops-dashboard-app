@@ -1,6 +1,5 @@
 'use client';
 
-import Layout from '@/components/layout';
 import {
   Box,
   Heading,
@@ -18,7 +17,13 @@ import {
   Flex,
   Icon,
 } from '@chakra-ui/react';
-import { TrendingUp, Users, FileText, DollarSign } from 'lucide-react';
+import {
+  TrendingUp,
+  Users,
+  FileText,
+  DollarSign,
+  LucideIcon,
+} from 'lucide-react';
 
 export default function Home() {
   return (
@@ -94,7 +99,7 @@ interface StatCardProps {
   title: string;
   value: string;
   change: string;
-  icon: any;
+  icon: LucideIcon;
   accentColor: string;
 }
 

@@ -8,7 +8,6 @@ import {
   DrawerContent,
   useDisclosure,
   IconButton,
-  DrawerCloseButton,
 } from '@chakra-ui/react';
 import { Menu } from 'lucide-react';
 import { Sidebar } from './sidebar';

@@ -2,7 +2,6 @@
 import { Product, Terms } from '@/lib/interfaces';
 import { formatPrice, getEngineColor } from '@/lib/utils';
 import {
-  Box,
   Heading,
   Text,
   Button,
@@ -17,7 +16,6 @@ import {
   StatNumber,
   StatHelpText,
   Badge,
-  StackDivider,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
@@ -53,6 +51,8 @@ export default function ProductDetailPage({
   terms,
   onBack,
 }: ProductDetailPageProps) {
+  const hoverBg = useColorModeValue('#151f21', 'gray.900');
+
   if (!product) return <Text>Product not found</Text>;
 
   const getPriceDetails = (sku: string, type: 'OnDemand' | 'Reserved') => {
@@ -73,6 +73,9 @@ export default function ProductDetailPage({
           price: formatPrice(price.pricePerUnit.USD),
           unit: price.unit,
           effectiveDate: offer.effectiveDate,
+          leaseContractLength: '',
+          purchaseOption: '',
+          offeringClass: '',
         };
 
         // Add specific attributes to reserved instances
@@ -231,7 +234,7 @@ export default function ProductDetailPage({
                   <Button
                     w={'full'}
                     mt={'auto'}
-                    bg={useColorModeValue('#151f21', 'gray.900')}
+                    bg={hoverBg}
                     color={'white'}
                     rounded={'md'}
                     _hover={{

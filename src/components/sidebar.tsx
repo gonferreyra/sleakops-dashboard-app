@@ -12,13 +12,13 @@ import {
   Button,
   useColorMode,
 } from '@chakra-ui/react';
-import { Home, Database } from 'lucide-react';
+import { Home, Database, LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 interface LinkItemProps {
   name: string;
-  icon: any;
+  icon: LucideIcon;
   path: string;
 }
 
@@ -72,7 +72,7 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
 };
 
 interface NavItemProps extends BoxProps {
-  icon: any;
+  icon: LucideIcon;
   path: string;
   isActive?: boolean;
   children: React.ReactNode;

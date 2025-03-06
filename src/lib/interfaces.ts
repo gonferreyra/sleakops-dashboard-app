@@ -1,5 +1,5 @@
 export interface AWSPrincingApiResponse {
-  attributesList: AttributesList;
+  // attributesList: AttributesList;
   disclaimer: string;
   formatVersion: string;
   offerCode: Code;
@@ -9,7 +9,7 @@ export interface AWSPrincingApiResponse {
   version: string;
 }
 
-export interface AttributesList {}
+// export interface AttributesList {}
 
 export enum Code {
   AmazonRDS = 'AmazonRDS',
@@ -516,7 +516,7 @@ export interface OnDemand {
   offerTermCode: OnDemandOfferTermCode;
   priceDimensions: { [key: string]: PriceDimension };
   sku: string;
-  termAttributes: AttributesList;
+  // termAttributes: AttributesList;
 }
 
 export enum OnDemandOfferTermCode {
@@ -524,7 +524,7 @@ export enum OnDemandOfferTermCode {
 }
 
 export interface PriceDimension {
-  appliesTo: any[];
+  appliesTo: string[];
   beginRange?: string;
   description: string;
   endRange?: string;
