@@ -9,6 +9,8 @@ import {
   useColorModeValue,
   Stack,
   Icon,
+  Button,
+  useColorMode,
 } from '@chakra-ui/react';
 import { Home, Database } from 'lucide-react';
 import Link from 'next/link';
@@ -31,6 +33,7 @@ interface SidebarProps extends BoxProps {
 
 export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
   const pathname = usePathname();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Box
@@ -60,6 +63,9 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
             {link.name}
           </NavItem>
         ))}
+        <Button onClick={toggleColorMode}>
+          Toggle {colorMode === 'light' ? 'Dark' : 'light'}
+        </Button>
       </Stack>
     </Box>
   );
@@ -87,6 +93,7 @@ const NavItem = ({ icon, path, isActive, children, ...rest }: NavItemProps) => {
         fontWeight={isActive ? 'medium' : 'normal'}
         _hover={{
           bg: 'brand.100',
+          color: 'brand.700',
         }}
         {...rest}
       >
