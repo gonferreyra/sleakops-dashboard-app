@@ -1,13 +1,8 @@
-# SleakOps Dashboard App
+# SleakOps Test Dashboard App
 
-<h1 align="center">
-  <br>
+<div align="center">
   <img src="logo-readme.png" alt="Task Board App" width="500">
-  
-  <br>
-  Sleakops Test
-  <br>
-</h1>
+</div>
 
 <h4 align="center">A simple dashboard app built with <a href="https://react.dev/" target="_blank">React</a>, <a href="https://nextjs.org/" target="_blank">NextJs</a> and <a href="https://chakra-ui.com/" target="_blank">Chakra UI</a>.</h4>
 
