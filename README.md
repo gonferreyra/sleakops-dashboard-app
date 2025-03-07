@@ -49,7 +49,7 @@ To clone and run this application from your command line:
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/gonferreyra/sleakops-dashboard-app.git
+$ git clone git@github.com:gonferreyra/sleakops-dashboard-app.git
 
 # Go into the repository
 $ cd sleakops-dashboard-app
@@ -74,7 +74,7 @@ $ npm run dev
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/gonferreyra/sleakops-dashboard-app.git
+git clone git@github.com:gonferreyra/sleakops-dashboard-app.git
 cd sleakops-dashboard-app
 ```
 
