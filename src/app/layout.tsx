@@ -9,7 +9,7 @@ import Layout from '@/components/layout';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Sleakops - Admin Dashboard',
+  title: 'Sleakops - Dashboard',
   description: 'Dashboard',
 };
 

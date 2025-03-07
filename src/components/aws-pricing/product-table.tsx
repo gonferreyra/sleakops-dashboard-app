@@ -45,7 +45,7 @@ export default function ProductTable({ response }: ProductTableProps) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [engineFilter, setEngineFilter] = useState<string>('all');
   const [memoryFilter, setMemoryFilter] = useState<string>('all');
-  const itemsPerPage = 10; // Cantidad de items por página
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
   const { onOpen } = useDisclosure();
@@ -95,6 +95,7 @@ export default function ProductTable({ response }: ProductTableProps) {
     currentPage * itemsPerPage
   );
 
+  // Framer variables
   const tableVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -108,15 +109,6 @@ export default function ProductTable({ response }: ProductTableProps) {
   const rowVariants = {
     hidden: { opacity: 0, x: -20 },
     show: { opacity: 1, x: 0 },
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handleViewDetails = (product: Product) => {
-    setSelectedProduct(product);
-    onOpen();
   };
 
   const pageTransition = {
@@ -139,6 +131,15 @@ export default function ProductTable({ response }: ProductTableProps) {
   };
 
   const AnimatedButton = motion(Button);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleViewDetails = (product: Product) => {
+    setSelectedProduct(product);
+    onOpen();
+  };
 
   return (
     <motion.div
@@ -208,7 +209,7 @@ export default function ProductTable({ response }: ProductTableProps) {
                 >
                   <Table
                     variant='simple'
-                    size='sm'
+                    size={{ base: 'sm', xl: 'md' }}
                     fontSize={{ base: 'xs', md: 'sm' }}
                   >
                     <Thead>

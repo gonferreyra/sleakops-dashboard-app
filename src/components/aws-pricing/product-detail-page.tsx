@@ -121,6 +121,7 @@ export default function ProductDetailPage({
   };
 
   const AnimatedBadge = motion(Badge);
+  const AnimatedCard = motion(Card);
 
   return (
     <Flex flexDirection='column'>
@@ -175,7 +176,8 @@ export default function ProductDetailPage({
           mt='6'
         >
           {allPrices.map((price, index) => (
-            <motion.div
+            <AnimatedCard
+              w='320px'
               key={index}
               variants={cardVariants}
               whileHover={{
@@ -184,121 +186,115 @@ export default function ProductDetailPage({
               }}
               whileTap={{ scale: 0.98 }}
             >
-              <Card w='320px'>
-                <CardHeader>
-                  <Text size={{ base: 'md', md: 'xl' }}>
-                    <Badge
-                      variant='subtle'
-                      colorScheme={price.type === 'OnDemand' ? 'green' : 'blue'}
-                      fontSize={{ base: 14, md: 18 }}
-                      borderRadius='lg'
-                      padding={2}
-                    >
-                      {price.type}
-                    </Badge>
-                  </Text>
-                </CardHeader>
-                <CardBody className='flex flex-col'>
-                  <Text
-                    mb={{ base: 2, md: 4 }}
-                    fontSize={{ base: 'sm', md: 'md' }}
+              <CardHeader>
+                <Text size={{ base: 'md', md: 'xl' }}>
+                  <Badge
+                    variant='subtle'
+                    colorScheme={price.type === 'OnDemand' ? 'green' : 'blue'}
+                    fontSize={{ base: 14, md: 18 }}
+                    borderRadius='lg'
+                    padding={2}
                   >
-                    {price.description}
-                  </Text>
-                  <SimpleGrid
-                    columns={{ base: 1, md: 2 }}
-                    spacing={{ base: 1, md: 4 }}
-                    mb={{ base: 2, md: 4 }}
+                    {price.type}
+                  </Badge>
+                </Text>
+              </CardHeader>
+              <CardBody display='flex' flexDirection='column'>
+                <Text
+                  mb={{ base: 2, md: 4 }}
+                  fontSize={{ base: 'sm', md: 'md' }}
+                >
+                  {price.description}
+                </Text>
+                <SimpleGrid
+                  columns={{ base: 1, md: 2 }}
+                  spacing={{ base: 1, md: 4 }}
+                  mb={{ base: 2, md: 4 }}
+                >
+                  <Stat>
+                    <StatLabel fontSize={{ base: 12, md: 14 }}>vCPU</StatLabel>
+                    <StatNumber fontSize={{ base: 20, md: 24 }}>
+                      {product.attributes.vcpu}
+                    </StatNumber>
+                    <StatHelpText fontSize={{ base: 12, md: 14 }}>
+                      Dedicated cores
+                    </StatHelpText>
+                  </Stat>
+                  <Stat>
+                    <StatLabel fontSize={{ base: 12, md: 14 }}>
+                      Memory
+                    </StatLabel>
+                    <StatNumber fontSize={{ base: 20, md: 24 }}>
+                      {product.attributes.memory}
+                    </StatNumber>
+                    <StatHelpText fontSize={{ base: 12, md: 14 }}>
+                      RAM available
+                    </StatHelpText>
+                  </Stat>
+                  <Stat>
+                    <StatLabel fontSize={{ base: 12, md: 14 }}>
+                      Deployment option
+                    </StatLabel>
+                    <StatNumber fontSize={{ base: 20, md: 24 }}>
+                      {product.attributes.deploymentOption}
+                    </StatNumber>
+                  </Stat>
+                  <Stat>
+                    <StatLabel fontSize={{ base: 12, md: 14 }}>Price</StatLabel>
+                    <StatNumber fontSize={{ base: 20, md: 24 }}>
+                      ${' '}
+                      {Number(price.price).toLocaleString(undefined, {
+                        minimumFractionDigits:
+                          price.price.toString().length > 6 ? 0 : 2,
+                        maximumFractionDigits:
+                          price.price.toString().length > 6 ? 0 : 2,
+                      })}
+                    </StatNumber>
+                    <StatHelpText fontSize={{ base: 12, md: 14 }}>
+                      {price.unit}
+                    </StatHelpText>
+                  </Stat>
+                </SimpleGrid>
+                <Stack spacing='3' mb='4' className='mt-auto'>
+                  {price.type === 'Reserved' && (
+                    <>
+                      <Text fontWeight='bold'>Additional Features:</Text>
+                      <Flex align='center'>
+                        <Badge colorScheme='green' mr='2'>
+                          Lease length
+                        </Badge>
+                        <Text>{price.leaseContractLength}</Text>
+                      </Flex>
+                      <Flex align='center'>
+                        <Badge colorScheme='purple' mr='2'>
+                          Purchase Option
+                        </Badge>
+                        <Text>{price.purchaseOption}</Text>
+                      </Flex>
+                      <Flex align='center'>
+                        <Badge colorScheme='blue' mr='2'>
+                          Offering class
+                        </Badge>
+                        <Text>{price.offeringClass}</Text>
+                      </Flex>
+                    </>
+                  )}
+                  <Button
+                    w={'full'}
+                    mt={'auto'}
+                    bg={hoverBg}
+                    color={'white'}
+                    rounded={'md'}
+                    _hover={{
+                      transform: 'translateY(-2px)',
+                      boxShadow: 'lg',
+                    }}
                   >
-                    <Stat>
-                      <StatLabel fontSize={{ base: 12, md: 14 }}>
-                        vCPU
-                      </StatLabel>
-                      <StatNumber fontSize={{ base: 20, md: 24 }}>
-                        {product.attributes.vcpu}
-                      </StatNumber>
-                      <StatHelpText fontSize={{ base: 12, md: 14 }}>
-                        Dedicated cores
-                      </StatHelpText>
-                    </Stat>
-                    <Stat>
-                      <StatLabel fontSize={{ base: 12, md: 14 }}>
-                        Memory
-                      </StatLabel>
-                      <StatNumber fontSize={{ base: 20, md: 24 }}>
-                        {product.attributes.memory}
-                      </StatNumber>
-                      <StatHelpText fontSize={{ base: 12, md: 14 }}>
-                        RAM available
-                      </StatHelpText>
-                    </Stat>
-                    <Stat>
-                      <StatLabel fontSize={{ base: 12, md: 14 }}>
-                        Deployment option
-                      </StatLabel>
-                      <StatNumber fontSize={{ base: 20, md: 24 }}>
-                        {product.attributes.deploymentOption}
-                      </StatNumber>
-                    </Stat>
-                    <Stat>
-                      <StatLabel fontSize={{ base: 12, md: 14 }}>
-                        Price
-                      </StatLabel>
-                      <StatNumber fontSize={{ base: 20, md: 24 }}>
-                        ${' '}
-                        {Number(price.price).toLocaleString(undefined, {
-                          minimumFractionDigits:
-                            price.price.toString().length > 6 ? 0 : 2,
-                          maximumFractionDigits:
-                            price.price.toString().length > 6 ? 0 : 2,
-                        })}
-                      </StatNumber>
-                      <StatHelpText fontSize={{ base: 12, md: 14 }}>
-                        {price.unit}
-                      </StatHelpText>
-                    </Stat>
-                  </SimpleGrid>
-                  <Stack spacing='3' mb='4' className='mt-auto'>
-                    {price.type === 'Reserved' && (
-                      <>
-                        <Text fontWeight='bold'>Additional Features:</Text>
-                        <Flex align='center'>
-                          <Badge colorScheme='green' mr='2'>
-                            Lease length
-                          </Badge>
-                          <Text>{price.leaseContractLength}</Text>
-                        </Flex>
-                        <Flex align='center'>
-                          <Badge colorScheme='purple' mr='2'>
-                            Purchase Option
-                          </Badge>
-                          <Text>{price.purchaseOption}</Text>
-                        </Flex>
-                        <Flex align='center'>
-                          <Badge colorScheme='blue' mr='2'>
-                            Offering class
-                          </Badge>
-                          <Text>{price.offeringClass}</Text>
-                        </Flex>
-                      </>
-                    )}
-                    <Button
-                      w={'full'}
-                      mt={'auto'}
-                      bg={hoverBg}
-                      color={'white'}
-                      rounded={'md'}
-                      _hover={{
-                        transform: 'translateY(-2px)',
-                        boxShadow: 'lg',
-                      }}
-                    >
-                      GET IT NOW
-                    </Button>
-                  </Stack>
-                </CardBody>
-              </Card>
-            </motion.div>
+                    GET IT NOW
+                  </Button>
+                </Stack>
+              </CardBody>
+            </AnimatedCard>
           ))}
         </Flex>
       </Flex>

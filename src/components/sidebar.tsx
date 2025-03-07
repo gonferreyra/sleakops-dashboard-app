@@ -54,7 +54,7 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRight='1px'
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', lg: 52 }}
+      w={{ base: 'full', lg: 56 }}
       pos='fixed'
       h='full'
       {...rest}
@@ -100,7 +100,7 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
             {link.name}
           </NavItem>
         ))}
-        <Button onClick={toggleColorMode}>
+        <Button onClick={toggleColorMode} marginX='4'>
           Toggle {colorMode === 'light' ? 'Dark' : 'light'}
         </Button>
       </Stack>
