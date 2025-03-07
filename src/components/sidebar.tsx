@@ -15,6 +15,8 @@ import {
 import { Home, Database, LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface LinkItemProps {
   name: string;
@@ -22,11 +24,12 @@ interface LinkItemProps {
   path: string;
 }
 
+export const MotionText = motion.create(Text);
+
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: Home, path: '/' },
   { name: 'AWS RDS', icon: Database, path: '/aws-pricing' },
 ];
-
 interface SidebarProps extends BoxProps {
   onClose: () => void;
 }
@@ -34,6 +37,16 @@ interface SidebarProps extends BoxProps {
 export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
   const pathname = usePathname();
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
   return (
     <Box
@@ -46,13 +59,37 @@ export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
       h='full'
       {...rest}
     >
-      <Flex h='20' alignItems='center' mx='8' justifyContent='space-between'>
-        <Text fontSize='2xl' fontWeight='bold'>
-          Sleakops
-        </Text>
+      <Flex
+        h='20'
+        alignItems='center'
+        mx='8'
+        justifyContent='space-between'
+        margin='4'
+      >
+        <motion.div
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
+          className='w-full mx-auto'
+        >
+          <Image
+            src='/sleakops-logo.png'
+            width={100}
+            height={50}
+            alt='logo'
+            className='mx-auto'
+          />
+        </motion.div>
         <CloseButton display={{ base: 'flex', lg: 'none' }} onClick={onClose} />
       </Flex>
-      <Stack spacing={2} mx={2}>
+      <Stack
+        spacing={2}
+        mx={2}
+        as={motion.div}
+        variants={container}
+        initial='hidden'
+        animate='show'
+      >
         {LinkItems.map((link) => (
           <NavItem
             key={link.name}
@@ -97,18 +134,26 @@ const NavItem = ({ icon, path, isActive, children, ...rest }: NavItemProps) => {
         }}
         {...rest}
       >
-        {icon && (
-          <Icon
-            mr='2'
-            fontSize='16'
-            as={icon}
-            color={isActive ? 'brand.500' : 'gray.500'}
-            _groupHover={{
-              color: 'brand.500',
-            }}
-          />
-        )}
-        {children}
+        <motion.div
+          variants={{
+            hidden: { x: -20, opacity: 0 },
+            show: { x: 0, opacity: 1 },
+          }}
+          transition={{ type: 'spring', stiffness: 100 }}
+        >
+          {icon && (
+            <Icon
+              mr='2'
+              fontSize='16'
+              as={icon}
+              color={isActive ? 'brand.500' : 'gray.500'}
+              _groupHover={{
+                color: 'brand.500',
+              }}
+            />
+          )}
+          {children}
+        </motion.div>
       </Flex>
     </Link>
   );
