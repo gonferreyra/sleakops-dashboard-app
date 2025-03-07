@@ -1,3 +1,5 @@
+'use client';
+
 import { useColorMode } from '@chakra-ui/react';
 import { clsx } from 'clsx';
 
