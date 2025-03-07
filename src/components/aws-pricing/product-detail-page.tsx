@@ -1,4 +1,5 @@
 'use client';
+import { cardVariants, containerVariants } from '@/lib/framer';
 import { Product, Terms } from '@/lib/interfaces';
 import { formatPrice, getEngineColor } from '@/lib/utils';
 import {
@@ -46,6 +47,9 @@ interface Offer {
   effectiveDate: string;
   termAttributes?: TermAttributes;
 }
+
+const AnimatedBadge = motion.create(Badge);
+const AnimatedCard = motion.create(Card);
 
 export default function ProductDetailPage({
   product,
@@ -97,31 +101,6 @@ export default function ProductDetailPage({
   const onDemandPrices = getPriceDetails(product.sku, 'OnDemand');
   const reservedPrices = getPriceDetails(product.sku, 'Reserved');
   const allPrices = [...onDemandPrices, ...reservedPrices];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring',
-        bounce: 0.4,
-      },
-    },
-  };
-
-  const AnimatedBadge = motion(Badge);
-  const AnimatedCard = motion(Card);
 
   return (
     <Flex flexDirection='column'>
