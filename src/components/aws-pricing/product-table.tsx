@@ -21,6 +21,7 @@ import {
   Button,
   HStack,
   useDisclosure,
+  Spinner,
 } from '@chakra-ui/react';
 import {
   Search,
@@ -33,10 +34,14 @@ import { AWSPrincingApiResponse, Product } from '@/lib/interfaces';
 import { filterAndSortProducts, getEngineColor } from '@/lib/utils';
 import ProductDetailPage from './product-detail-page';
 import { motion } from 'framer-motion';
+import { pageTransition, rowVariants, tableVariants } from '@/lib/framer';
+import { useSearchDebounce } from '@/lib/hooks';
 
 type ProductTableProps = {
   response: AWSPrincingApiResponse;
 };
+
+const AnimatedButton = motion.create(Button);
 
 export default function ProductTable({ response }: ProductTableProps) {
   const [products] = useState(() => response.products);
@@ -49,18 +54,19 @@ export default function ProductTable({ response }: ProductTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { onOpen } = useDisclosure();
+  const { debouncedValue, isTyping } = useSearchDebounce(searchTerm);
 
   // Filter products based on search term and filters
   useEffect(() => {
     const result = filterAndSortProducts(
       Object.values(products),
-      searchTerm,
+      debouncedValue,
       engineFilter,
       memoryFilter
     );
     setFilteredProducts(result);
     setCurrentPage(1);
-  }, [searchTerm, engineFilter, memoryFilter, products]);
+  }, [debouncedValue, engineFilter, memoryFilter, products]);
 
   // Get unique engines and regions for filters, delete empty values and sort them
   const engines = [
@@ -94,43 +100,6 @@ export default function ProductTable({ response }: ProductTableProps) {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  // Framer variables
-  const tableVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const rowVariants = {
-    hidden: { opacity: 0, x: -20 },
-    show: { opacity: 1, x: 0 },
-  };
-
-  const pageTransition = {
-    hidden: { opacity: 0, x: -100 },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: 'spring',
-        duration: 0.5,
-      },
-    },
-    exit: {
-      opacity: 0,
-      x: 100,
-      transition: {
-        duration: 0.3,
-      },
-    },
-  };
-
-  const AnimatedButton = motion(Button);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -207,96 +176,100 @@ export default function ProductTable({ response }: ProductTableProps) {
                   borderRadius='lg'
                   overflowX={{ base: 'auto', md: 'hidden' }}
                 >
-                  <Table
-                    variant='simple'
-                    size={{ base: 'sm', xl: 'md' }}
-                    fontSize={{ base: 'xs', md: 'sm' }}
-                  >
-                    <Thead>
-                      <Tr height={'50px'}>
-                        <Th>Instance Type</Th>
-                        <Th display={{ base: 'none', sm: 'table-cell' }}>
-                          Engine
-                        </Th>
-                        <Th display={{ base: 'none', md: 'table-cell' }}>
-                          Region
-                        </Th>
-                        <Th display={{ base: 'none', md: 'table-cell' }}>
-                          vCPU
-                        </Th>
-                        <Th display={{ base: 'none', lg: 'table-cell' }}>
-                          Memory
-                        </Th>
-                        <Th>Actions</Th>
-                      </Tr>
-                    </Thead>
-                    <motion.tbody
-                      variants={tableVariants}
-                      initial='hidden'
-                      animate='show'
+                  {isTyping ? (
+                    <Flex justify='center' align='center' height='200px'>
+                      <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                      />
+                    </Flex>
+                  ) : (
+                    <Table
+                      variant='simple'
+                      size={{ base: 'sm', xl: 'md' }}
+                      fontSize={{ base: 'xs', md: 'sm' }}
                     >
-                      {paginatedData.map((product) => (
-                        <motion.tr
-                          key={product.sku}
-                          variants={rowVariants}
-                          whileHover={{
-                            scale: 1.01,
-                            transition: { duration: 0.2 },
-                            backgroundColor: 'rgba(37, 33, 33, 0.05)',
-                          }}
-                        >
-                          <Td fontWeight='medium'>
-                            {product.attributes.instanceType}
-                          </Td>
-                          <Td display={{ base: 'none', sm: 'table-cell' }}>
-                            <Badge
-                              colorScheme={getEngineColor(
-                                product.attributes.databaseEngine as string
-                              )}
-                            >
-                              {product.attributes.databaseEngine}
-                            </Badge>
-                          </Td>
-                          <Td display={{ base: 'none', md: 'table-cell' }}>
-                            {product.attributes.regionCode}
-                          </Td>
-                          <Td display={{ base: 'none', md: 'table-cell' }}>
-                            {product.attributes.vcpu}
-                          </Td>
-                          <Td display={{ base: 'none', lg: 'table-cell' }}>
-                            {product.attributes.memory}
-                          </Td>
-                          <Td>
-                            <AnimatedButton
-                              size={{ base: 'xs', md: 'sm' }}
-                              colorScheme='blue'
-                              leftIcon={<Info size={16} />}
-                              onClick={() => handleViewDetails(product)}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{
-                                type: 'spring',
-                                stiffness: 400,
-                                damping: 10,
-                              }}
-                            >
-                              Details
-                            </AnimatedButton>
-                            {/* <Button
-                            size={{ base: 'xs', md: 'sm' }}
-                            colorScheme='blue'
-                            leftIcon={<Info size={16} />}
-                            onClick={() => handleViewDetails(product)}
+                      <Thead>
+                        <Tr height={'50px'}>
+                          <Th>Instance Type</Th>
+                          <Th display={{ base: 'none', sm: 'table-cell' }}>
+                            Engine
+                          </Th>
+                          <Th display={{ base: 'none', md: 'table-cell' }}>
+                            Region
+                          </Th>
+                          <Th display={{ base: 'none', md: 'table-cell' }}>
+                            vCPU
+                          </Th>
+                          <Th display={{ base: 'none', lg: 'table-cell' }}>
+                            Memory
+                          </Th>
+                          <Th>Actions</Th>
+                        </Tr>
+                      </Thead>
+                      <motion.tbody
+                        variants={tableVariants}
+                        initial='hidden'
+                        animate='show'
+                      >
+                        {paginatedData.map((product) => (
+                          <motion.tr
+                            key={product.sku}
+                            variants={rowVariants}
+                            whileHover={{
+                              scale: 1.01,
+                              transition: { duration: 0.2 },
+                              backgroundColor: 'rgba(37, 33, 33, 0.05)',
+                            }}
                           >
-                            Details
-                          </Button> */}
-                          </Td>
-                        </motion.tr>
-                      ))}
-                    </motion.tbody>
-                  </Table>
+                            <Td fontWeight='medium'>
+                              {product.attributes.instanceType}
+                            </Td>
+                            <Td display={{ base: 'none', sm: 'table-cell' }}>
+                              <Badge
+                                colorScheme={getEngineColor(
+                                  product.attributes.databaseEngine as string
+                                )}
+                              >
+                                {product.attributes.databaseEngine}
+                              </Badge>
+                            </Td>
+                            <Td display={{ base: 'none', md: 'table-cell' }}>
+                              {product.attributes.regionCode}
+                            </Td>
+                            <Td display={{ base: 'none', md: 'table-cell' }}>
+                              {product.attributes.vcpu}
+                            </Td>
+                            <Td display={{ base: 'none', lg: 'table-cell' }}>
+                              {product.attributes.memory}
+                            </Td>
+                            <Td>
+                              <AnimatedButton
+                                size={{ base: 'xs', md: 'sm' }}
+                                colorScheme='blue'
+                                leftIcon={<Info size={16} />}
+                                onClick={() => handleViewDetails(product)}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{
+                                  type: 'spring',
+                                  stiffness: 400,
+                                  damping: 10,
+                                }}
+                              >
+                                Details
+                              </AnimatedButton>
+                            </Td>
+                          </motion.tr>
+                        ))}
+                      </motion.tbody>
+                    </Table>
+                  )}
                 </TableContainer>
 
                 <TableContainer>

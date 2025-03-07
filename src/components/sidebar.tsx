@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { container } from '@/lib/framer';
 
 interface LinkItemProps {
   name: string;
@@ -37,16 +38,6 @@ interface SidebarProps extends BoxProps {
 export const Sidebar = ({ onClose, ...rest }: SidebarProps) => {
   const pathname = usePathname();
   const { colorMode, toggleColorMode } = useColorMode();
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
 
   return (
     <Box
