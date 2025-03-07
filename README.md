@@ -37,6 +37,7 @@ The AWS RDS tab is the one that contains the technical test. When you click on i
 - Pagination, showing 10 results per page.
 - The ability to filter with an input, which allows you to search the results by instance type, database engine, memory and vpcu. It is also available to search by region code, but the code was commented out because all the searches have the same value.
 - 2 select fields with all the available options of engine and memory.
+- Debounce implemented on the input field. This has the purpose to reduce the number of requests to the API. However, due to the current implementation, results are filtered directly on the client without making a new request, so this feature does not have a impact in performance.
 - The results are sorted in order to show last the products with empty fields.
 - The table has a button to show the details of each product that leads to a specific page of the product, showing the available options on cards, which are divided into OnDemand or Reserved, with their corresponding data.
 - The cards show the product with the following fields: descriptions, vppu, memory, deployment options, price (depending on whether it is by hour or by quantity with that detail), and in the case of Reserved type, the additional options of lease length, purchase options, and offering class are shown.
