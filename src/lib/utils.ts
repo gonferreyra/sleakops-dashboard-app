@@ -35,7 +35,7 @@ export const filterAndSortProducts = (
         product.attributes?.instanceType
           ?.toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        product.attributes.databaseEngine
+        product.attributes?.databaseEngine
           ?.toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         product.attributes?.memory
@@ -44,6 +44,10 @@ export const filterAndSortProducts = (
         product.attributes?.vcpu
           ?.toLowerCase()
           .includes(searchTerm.toLowerCase())
+      // ||
+      // product.attributes?.regionCode
+      //   ?.toLowerCase()
+      //   .includes(searchTerm.toLowerCase())
     );
   }
 
